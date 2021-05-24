@@ -7,11 +7,21 @@ import { Conference } from './Conference'
 
 /** Arrays */
 
-let mentorArray:Mentor[] = [];
+let mentorArray:Mentor[] = [
+  new Mentor("roso", "roso@", "1234"),
+  new Mentor("angel", "angel@", "1234"),
+  new Mentor("andres", "andres@", "1234")
+];
 
-let studentArray:Student[] = [];
+let studentArray:Student[] = [
+    new Student("hector", "hector@"),
+    new Student("Veronica", "Vero@"),
+    new Student("Santiago", "Santi@")
+];
 
-let conferenceArray: Conference[] = [];
+let conferenceArray: Conference[] = [
+    new Conference("angular", "25-05-2021", "26-05-2021", new Mentor("alejo", "alejo@", "1234"), [])
+];
 
 
 
@@ -21,10 +31,9 @@ function mentorValidation (mentorArray:Mentor[], mail:string, passw:string){
 return mentorArray.find(mentor => mentor.getEmail() === mail && mentor.getPassword() === passw)
 }
 
-function uniqueEmail (email:string[], emailInput:string){
+function uniqueEmail (email:string[], emailInput:string):boolean{
   return email.some(e => e === emailInput)
 }
-
 
 (async () => {
   const menu = new Menu()
@@ -47,7 +56,8 @@ function uniqueEmail (email:string[], emailInput:string){
           const mentorPasswInput:string = await menu.getString('Ingrese password del mentor')
 
           //validar que el correo sea unico
-          let searchMentorEmail:boolean = mentorArray.some(email => email.getEmail() === mentorEmailInput)
+          let searchMentorEmail:boolean = uniqueEmail(mentorArray.map(e => e.getEmail()), mentorEmailInput)
+
           if (searchMentorEmail){
             console.log("El correo ya se encuentra registrado")
           } else {
@@ -60,16 +70,15 @@ function uniqueEmail (email:string[], emailInput:string){
         case 2:
           const studentNameInput:string = await menu.getString('Ingrese nombre del estudiante')
           const studentEmailInput:string = await menu.getString('Ingrese email del estudiante')
-          const studentPasswInput:string = await menu.getString('Ingrese password del estudiante')
 
           //validar que el correo sea único
-            let searchStudentEmail:boolean = studentArray.some(email => email.getEmail() === studentEmailInput)
+            let searchStudentEmail:boolean = uniqueEmail(studentArray.map(e => e.getEmail()), studentEmailInput)
             if(searchStudentEmail){
               console.log("El correo ya se encuentra registrado")
             } else {
 
               //si el correo es único agrega nuevo mentor al arreglo studentArray
-              studentArray.push(new Student(studentNameInput, studentEmailInput, studentPasswInput))
+              studentArray.push(new Student(studentNameInput, studentEmailInput))
             }
           break;
         
@@ -135,9 +144,9 @@ function uniqueEmail (email:string[], emailInput:string){
       
         case 6:
           const registerEmail:string = await menu.getString('Ingrese su correo electrónico')
-          const registerPassword:string = await menu.getString('Ingrese su contraseña')
+
             //se valida datos de usuario estudiante
-          const validatedUser:Student | undefined = studentArray.find(e => e.getEmail() === registerEmail && e.getPassword() === registerPassword)
+          const validatedUser:Student | undefined = studentArray.find(e => e.getEmail() === registerEmail)
             if (validatedUser === undefined){
               console.log("Datos de usuario no corresponden con nuestras bases de datos")
             } else {
@@ -172,9 +181,9 @@ function uniqueEmail (email:string[], emailInput:string){
           break;
         
         case 7:
-          const listaEstudiantes:string[] = studentArray.map(e => e.getPersonName())
-          console.log(listaEstudiantes)
-              break;
+          let studentsList = studentArray.map(e => "Name: " + e.getPersonName() + ", " + "Email: " + e.getEmail())
+          console.log(studentsList)
+          break;
 
         case 8:
           const inputConference:string = await menu.getString('Ingrese nombre de la conferencia')
@@ -187,7 +196,8 @@ function uniqueEmail (email:string[], emailInput:string){
           break;
 
         case 9:
-          console.log(mentorArray.map(e => e.getPersonName()))
+          let mentorsList = mentorArray.map(e => "Name: " + e.getPersonName() + ", " + "Email: " + e.getEmail())
+          console.log(mentorsList)
           break;
 
         case 10:
@@ -196,7 +206,9 @@ function uniqueEmail (email:string[], emailInput:string){
           if (searchForConference2 === undefined){
             console.log("La conferencia ingresada no existe")
           } else {
-            console.log(searchForConference2.getInstructor().getPersonName())
+            const mentoresPorEvento = "Name: " + searchForConference2.getInstructor().getPersonName()
+                                    + " " + "Email: " + searchForConference2.getInstructor().getEmail()
+            console.log(mentoresPorEvento)
           }
           break;
 
