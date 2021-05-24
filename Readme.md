@@ -1,4 +1,4 @@
-#TypeScript: Object-Oriented Programming App
+# TypeScript: Object-Oriented Programming App
 
 This is a console application, it will be always execute from terminal, 
 you should find a menu with the options to implement all the requirements
