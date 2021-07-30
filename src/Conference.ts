@@ -1,14 +1,15 @@
 import {Mentor} from "./Mentor";
+import {Student} from "./Student";
 
 export class Conference {
     protected conferenceName:string;
     public startingDate:string;
     public endingDate:string;
     protected instructor:Mentor;
-    protected participants:string[];
+    protected participants:Student[];
 
     constructor(conferenceName:string, startingDate:string, endingDate:string,
-                instructor:Mentor, participants:string[]){
+                instructor:Mentor, participants:Student[]){
         this.conferenceName = conferenceName;
         this.startingDate = startingDate;
         this.endingDate = endingDate;
@@ -24,7 +25,12 @@ export class Conference {
         return this.instructor;
     }
 
-    getParticipants():string[]{
+    getParticipants():Student[]{
         return this.participants;
+    }
+
+    addParticipants(student:Student): boolean{
+        this.participants.push(student)
+        return true
     }
 }

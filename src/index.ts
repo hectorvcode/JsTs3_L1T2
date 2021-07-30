@@ -143,36 +143,36 @@ function uniqueEmail (email:string[], emailInput:string):boolean{
           break;
       
         case 6:
-          const registerEmail:string = await menu.getString('Ingrese su correo electrónico')
+          const inputEmail:string = await menu.getString('Ingrese su correo electrónico')
 
             //se valida datos de usuario estudiante
-          const validatedUser:Student | undefined = studentArray.find(e => e.getEmail() === registerEmail)
+          const validatedUser:Student | undefined = studentArray.find(e => e.getEmail() === inputEmail)
             if (validatedUser === undefined){
               console.log("Datos de usuario no corresponden con nuestras bases de datos")
             } else {
-              const registerConferencia:string = await menu.getString('Ingrese nombre de la conferencia en la cual desea registrarse')
+              const registerConference:string = await menu.getString('Ingrese nombre de la conferencia en la cual desea registrarse')
+
               //se valida si la conferencia existe
-              const validatedConference:Conference | undefined = conferenceArray.find(e => e.getConferenceName() === registerConferencia)
-              if (validatedConference === undefined){
+              const validateConference:Conference | undefined = conferenceArray.find(e => e.getConferenceName() === registerConference)
+              if (validateConference === undefined){
                 console.log("La conferencia no se encuentra en nuestras bases de datos")
               } else {
 
                 //se valida si hay cupo disponible
-                if (validatedConference.getParticipants().length >= 20){
+                if (validateConference.getParticipants().length >= 20){
                   console.log("No tiene cupos disponibles")
                 } else {
-                  const findEvent: Conference | undefined = conferenceArray.find(e => e.getConferenceName() === registerConferencia)
+                  const findEvent: Conference | undefined = conferenceArray.find(e => e.getConferenceName() === registerConference)
                   if(findEvent === undefined){
                     console.log("Conferencia no encontrada")
                   } else {
-                    //validar si el correo ya está registrado
-                    if(uniqueEmail(findEvent.getParticipants(), registerEmail)){
-                      console.log("El usuario ya se encuentra registrado")
+                    const validateUniqueEmail = findEvent.getParticipants().some(e => e.getEmail() === inputEmail)
+                    if(validateUniqueEmail){
+                      console.log("El estudiante ya se encuentra registrado")
+                    } else {
+                        findEvent.addParticipants(validatedUser)
                     }
-                    findEvent.getParticipants().push(registerEmail)
-
-                    console.log("Te registraste de forma exitosa")
-                    console.log(findEvent.getParticipants())
+                    console.log(`Registro exitoso de ${inputEmail} en conferencia: ${findEvent.getConferenceName()}`)
                   }
                 }
               }
